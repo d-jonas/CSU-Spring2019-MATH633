@@ -1,5 +1,6 @@
 *.pyc
-.DS_Store
-._.DS_Store
+*.DS_Store
+*._.DS_Store
 *__pycache__
 *~
+*.pickle
