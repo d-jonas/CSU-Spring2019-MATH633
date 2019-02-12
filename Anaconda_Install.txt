@@ -1,5 +1,5 @@
 ########################################
-- Installing Anaconda/Jupyter Notebook -
+- Installing Anaconda -
 ########################################
 
 Tested on Windows, soon to be tested on Linux, need volunteer for MacOS.
@@ -37,6 +37,34 @@ Step 2: Running the Installer
     Anaconda as the default python program (you can read the benefits). Click
     "Install". This will take a while and you cannot stop the installation once 
     it is started. Then grab a Viennese coffee or Earl Grey tea (no substitutions).
+    
+    Skip the installation of Visual Code (unless you want to use it as your IDE,
+    I've heard good things about it but never used it).
+    
+Step 3: Learning More and Installing Packages
 
+    Leave the two checkboxes checked (the second one is the most relevant for the 
+    class) and click "Finish". Your browser will open with the Anaconda 
+    Documentation site. There are instructions for Navigating to the various tools
+    provided in your Anaconda installation for Windows, macOS, and Linux.
+    
+    Note that there is also a section on Conda in the dropdown table of contents
+    to the left of the page. Conda is the tool you use when installing packages, 
+    so this is definitely worth looking at, especially:
+    https://conda.io/projects/conda/en/latest/user-guide/getting-started.html
+    which shows, among other things, how to install Python packages.
+    
+    If you need to install a Python package, then open the Conda program (find
+    how to at
+    https://conda.io/projects/conda/en/latest/user-guide/getting-started.html#starting-conda
+    which provides instructions for Windows, macOS, and Linux).
+    Type "conda install packagename" (without quotes) to begin installing. You 
+    will have to agree to the installation of packages after Conda figures out 
+    what to do about dependencies.
+    
+    Sometimes you will have to use conda-forge which is the community supported set
+    of packages. For an example of this installing tensorflow, see
+    https://anaconda.org/conda-forge/tensorflow
+    
 -------------------------------------------------
 
