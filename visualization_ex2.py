@@ -1,5 +1,5 @@
 '''
-Example visualization of the data using encoded data
+Example visualization of the data using plain data
 chorales.py. Each entry in the chorales.train, .test, .valid
 corresponds to a single chorale.
 
@@ -11,16 +11,14 @@ The plain format has uniform zero-one vectors to be used for LSTM.
 import chorales
 from matplotlib import pyplot
 
-example = chorales.encoded_train[0]
+example = chorales.train[0]
 
-fig,ax = pyplot.subplots(1,1, figsize=(12,5))
+fig,ax = pyplot.subplots(1,1, figsize=(8,5))
 
-for i,beat in enumerate(example):
-    ax.scatter( [i+1 for _ in beat] , beat, s=10, c='k')
-#
+ax.imshow( example, cmap=pyplot.cm.Greys )
 
 # Prettify the plot a little. Assume everything is in 4/4 time.
-ax.set_xticks( [8*j for j in range((i+1)//8 + 1)] )
+ax.set_xticks( [8*j for j in range(example.shape[1]//8 + 1)] )
 
 # TODO: associate the numerical values with usual tones
 # (e.g. what does a tone of "80" correspond to on the keyboard?)
