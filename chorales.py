@@ -17,9 +17,11 @@ import numpy as np
 # indicate the correct path.
 prefix = './'
 
-with open(prefix + 'JSB Chorales.pickle','rb') as f:
-    all_data = pickle.load(f)
-
+try:
+    with open(prefix + 'JSB Chorales.pickle','rb') as f:
+        all_data = pickle.load(f)
+except:
+    raise Exception('Loading the chorales pickle file failed. Please ensure the file is in the proper folder.')
 
 #
 # Data is structured as a dictionary broken
