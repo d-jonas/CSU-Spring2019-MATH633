@@ -1,0 +1,42 @@
+########################################
+- Installing Anaconda/Jupyter Notebook -
+########################################
+
+Tested on Windows, soon to be tested on Linux, need volunteer for MacOS.
+
+---------Anaconda--------------------------------
+First we must install the Anaconda Distribution. This is available for 
+Windows, MacOS, and Linux. Since Python 2 no longer is being supported and is
+considered legacy, we will install the Python 3 version of Anaconda.
+
+Step 1: Navigating to the Website and Clicking Things
+
+    Copy and paste the following URL into your browser's address bar:
+    https://www.anaconda.com/distribution/#download-section
+
+    When the page loads you should see a "Download" button under text reading 
+    "Python 3.7 version". Click on this download button.
+
+    An executable named something like "Anaconda3-5.3.1-Windows-x86_64.exe" should
+    be downloaded (the name and extension will be slightly different for MacOS and
+    Linux, but will begin with "Anaconda3"). This is the installer we will use in 
+    the next step.
+
+Step 2: Running the Installer
+
+    Run the installer. In the new window that should pop up, click "Next", then 
+    "I Agree". Make sure the radio button next to "Just Me" is selected, then
+    click "Next".
+
+    You should now be given the option of choosing where the Anaconda distribution
+    will be installed. The default should be fine (note if you happen to have a 
+    folder which already has that name, an error will occur and you will be prompted
+    to change the name). You then click "Next".
+
+    Leave the first checkbox unchecked. Check the second checkbox which registers
+    Anaconda as the default python program (you can read the benefits). Click
+    "Install". This will take a while and you cannot stop the installation once 
+    it is started. Then grab a Viennese coffee or Earl Grey tea (no substitutions).
+
+-------------------------------------------------
+
