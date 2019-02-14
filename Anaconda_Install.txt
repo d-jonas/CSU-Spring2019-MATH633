@@ -1,12 +1,12 @@
 ########################################
-- Installing Anaconda -
+  - Installing Anaconda and Pytorch -
 ########################################
 
-Tested on Windows, soon to be tested on Linux, need volunteer for MacOS.
+Tested on Windows and Linux. Need volunteer for macOS.
 
----------Anaconda--------------------------------
+----------Anaconda-------------------------------
 First we must install the Anaconda Distribution. This is available for 
-Windows, MacOS, and Linux. Since Python 2 no longer is being supported and is
+Windows, macOS, and Linux. Since Python 2 no longer is being supported and is
 considered legacy, we will install the Python 3 version of Anaconda.
 
 Step 1: Navigating to the Website and Clicking Things
@@ -67,4 +67,17 @@ Step 3: Learning More and Installing Packages
     https://anaconda.org/conda-forge/tensorflow
     
 -------------------------------------------------
+----------Pytorch--------------------------------
+Step 1) Open the Anaconda Prompt (if you search for the program on your computer, it 
+        should show up).
 
+Step 2) Type "conda install pytorch torchvision cudatoolkit=9.0 -c pytorch" without 
+        the quotes.
+
+Step 3) When prompted, accept the changes to be made. The installation should not take 
+        more than a minute or two.
+        
+To use the Pytorch package in your Python code, include a line with "import torch" at
+the top of your code along with the other import statements.
+
+-------------------------------------------------
