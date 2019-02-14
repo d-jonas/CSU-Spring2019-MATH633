@@ -22,8 +22,11 @@ for i,beat in enumerate(example):
 # Prettify the plot a little. Assume everything is in 4/4 time.
 ax.set_xticks( [8*j for j in range((i+1)//8 + 1)] )
 
-# TODO: associate the numerical values with usual tones
-# (e.g. what does a tone of "80" correspond to on the keyboard?)
+# Places notes on y-axis in place of numbers
+skip = 7 # Determines skips between tick marks on y-axis
+for i in range(21,109,skip):
+    tone_labels.append(midi2note[i])
+pyplot.yticks(range(21,109,skip),tone_labels)
 
 ax.set_xlabel('Beat number', fontsize=16)
 ax.set_ylabel('Tone', fontsize=16)
