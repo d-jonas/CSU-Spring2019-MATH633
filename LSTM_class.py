@@ -9,6 +9,7 @@ class LSTM(torch.nn.Module):
         super().__init__() # Run Module class constructor
         self.input_size = input_size
         self.num_nodes = num_nodes
+        self.output_size = output_size
         self.num_samples = num_samples
         self.num_layers = num_layers
         self.bidirectional = bidirectional
@@ -24,6 +25,14 @@ class LSTM(torch.nn.Module):
         
         # Define the final transformation from the hidden layers to output
         self.linear = torch.nn.Linear(self.num_nodes, output_size)
+        
+        # Initialize hidden weights
+        self.hidden = init_hidden()
+         
+    def init_hidden(self):
+        # The axes are (num_layers, minibatch_size, hidden_dim)
+        return (torch.zeros(self.num_layers, 1, self.hidden_dim),
+                torch.zeros(self.num_layers, 1, self.hidden_dim))
     
     def forward(self, input):
         """Runs input data once through the network."""
@@ -36,7 +45,7 @@ class LSTM(torch.nn.Module):
         out, self.hidden = self.lstm(input, self.hidden)
                                      
         # Convert output of LSTM layers into final output prediction
-        pred = self.linear(out.view(self.input_size, self.num_samples,
+        pred = self.linear(out.view(self.output_size, self.num_samples,
                                     self.num_nodes))
         
         # Return prediction of size output_size
