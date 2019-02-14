@@ -1,7 +1,7 @@
 import torch
 
-"""Initializes an LSTM neural network with default parameters defined by the
-   constants predefined in this script.""" 
+"""Initializes an LSTM neural network class with convenient default
+   parameters for chorales.""" 
 
 class LSTM(torch.nn.Module):
     def __init__(self, num_samples, input_size=87, num_nodes=20, 
