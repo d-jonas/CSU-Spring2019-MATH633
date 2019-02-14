@@ -68,11 +68,19 @@ Step 3: Learning More and Installing Packages
     
 -------------------------------------------------
 ----------Pytorch--------------------------------
+The following instructions will add the Pytorch package to your Anaconda package set.
+This is better than installing Pytorch through the pip installer for Python because
+Anaconda will ensure Pytorch interacts nicely with all the other packages installed.
+
 Step 1) Open the Anaconda Prompt (if you search for the program on your computer, it 
         should show up).
 
-Step 2) Type "conda install pytorch torchvision cudatoolkit=9.0 -c pytorch" without 
-        the quotes.
+Step 2) Type one of the following without the quotes: 
+        Windows: "conda install pytorch torchvision cudatoolkit=9.0 -c pytorch" 
+        Linux: "conda install pytorch torchvision cudatoolkit=9.0 -c pytorch"
+        macOS: "conda install pytorch torchvision -c pytorch"
+               (macOS Binaries dont support CUDA so more instruction will be needed if
+               CUDA is required)
 
 Step 3) When prompted, accept the changes to be made. The installation should not take 
         more than a minute or two.
