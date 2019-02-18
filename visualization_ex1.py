@@ -43,6 +43,7 @@ midi2note = dict((i+21, note) for i, note in enumerate(notes))
 note2midi = dict((v,k) for k,v in midi2note.items())
 
 skip = 7 # Determines skips between tick marks on y-axis
+tone_labels = [] # init list of tone labels to be generated below
 for i in range(21,109,skip):
     tone_labels.append(midi2note[i])
 pyplot.yticks(range(21,109,skip),tone_labels)
