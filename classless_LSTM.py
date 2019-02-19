@@ -18,13 +18,14 @@ model = torch.nn.LSTM(input_size = input_size,
                       bias = True,
                       batch_first = False,
                       dropout = 0,
-                      bidirectional = True)
+                      bidirectional = False)
 
-# Why does the first dimension have to be 2???
-hidden = (torch.zeros(2,1,hidden_size),torch.zeros(2,1,hidden_size))
+# First dimension is 2 if bidirectional = True
+hidden = (torch.zeros(1,1,hidden_size),torch.zeros(1,1,hidden_size))
 
 # Output layer to take LSTM block output and convert to a prediction
-out_layer = torch.nn.Linear(2*hidden_size, output_size)
+# 2*hidden_size if bidirectional
+out_layer = torch.nn.Linear(hidden_size, output_size)
 
 # Initialize a random input
 input = torch.randn(1,1,input_size)
