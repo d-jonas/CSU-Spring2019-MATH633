@@ -26,7 +26,7 @@ def gen(s=1, m=0, sd=0.1, freq=2, phase=1.5, num_points=1000, a=0, b=2*np.pi):
     """
 
     # Generate noisy sine curve data
-    random.seed(1)
+    random.seed(s)
     x = list(np.arange(a, b, (b-a)/num_points))
     arg = [freq*i+phase for i in x]
     data = np.sin(arg)
