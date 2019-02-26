@@ -8,7 +8,7 @@ in LSTM_class.py. Add comments and generality as you learn things.
 
 # Defining parameters for the data and LSTM block
 input_size = 88
-hidden_size = 100
+hidden_size = 88
 num_layers = 1
 output_size = 88
 
@@ -33,7 +33,7 @@ hidden = (torch.zeros(1,1,hidden_size),torch.zeros(1,1,hidden_size))
 out_layer = torch.nn.Linear(hidden_size, output_size)
 
 # Initialize a random input
-#input = torch.randn(1,1,input_size)
+input = torch.randn(1,1,input_size)
 
 # Initialize a tensor of the proper size containing song
 input = torch.zeros(len(song[0]),1,input_size)

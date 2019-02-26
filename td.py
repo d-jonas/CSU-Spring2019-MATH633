@@ -10,7 +10,7 @@ February 19, 2019
 import numpy as np
 import random
 
-def gen(s=1, m=0, sd=0.1, freq=2, phase=1.5, num_points=1000, a=0, b=2*np.pi):
+def gen(s=1, m=0, sd=0.0, freq=2, phase=1.5, num_points=1000, a=0, b=2*np.pi):
     """
     Generates a sine curve with Gaussian noise according to input
     parameters. Defaults are given for all values as follows:
@@ -35,9 +35,7 @@ def gen(s=1, m=0, sd=0.1, freq=2, phase=1.5, num_points=1000, a=0, b=2*np.pi):
 
     return(data)
 
-# If doing so won't overwrite anything, generate data in td.td
-if 'td.td' not in globals() and 'td.td' not in locals():
-    td = gen()
+td = gen()
 
 """
 A plot of the data in td.td can be created using the following code:
