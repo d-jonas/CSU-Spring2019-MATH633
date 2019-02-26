@@ -19,17 +19,26 @@ network = LSTM_class.LSTM()
 network.float()
 
 # Define the loss function and optimization function
+# Loss Library: L1Loss, MSELoss, CrossEntropyLoss, NLLLoss
+
 loss_fn = torch.nn.MSELoss()
 optimizer = torch.optim.SGD(network.parameters(), lr=0.05, momentum=0.5)
 
+# Number of epochs
+epochs = 1000
+
+# Init Loss vector for plotting
+losses = np.empty(epochs)
+
 # Start training the network
-for i in range(1000):
+for i in range(epochs):
     network.hidden = network.init_hidden()
     out = network.forward(torch_tests,len(tests))
     loss = loss_fn(out, torch_tests_targets)
     optimizer.zero_grad()
     loss.backward()
     optimizer.step()
+    losses[i] = loss.item()
 
     # Occasionally print the loss
     if i%5 == 0:
