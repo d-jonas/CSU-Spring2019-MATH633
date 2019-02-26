@@ -35,19 +35,25 @@ notes = [
 'C8']
 
 # midi number indexes note
-midi2note = dict((i+21, note) for i, note in enumerate(notes))
+shift=0
+midi2note = dict((i+shift, note) for i, note in enumerate(notes))
+
 
 # note indexes midi number
 note2midi = dict((v,k) for k,v in midi2note.items())
 
-skip = 7 # Determines skips between tick marks on y-axis
-tone_labels = [] # init list of tone labels to be generated below
-for i in range(21,109,skip):
+skip = 12 # Determines skips between tick marks on y-axis
+
+tone_labels = []
+
+for i in range(shift,shift+88,skip):
     tone_labels.append(midi2note[i])
-pyplot.yticks(range(21,109,skip),tone_labels)
+
+pyplot.yticks(range(shift,shift+88,skip),tone_labels)
 
 ax.set_xlabel('Beat number', fontsize=16)
 ax.set_ylabel('Tone', fontsize=16)
 ax.xaxis.grid()
+ax.invert_yaxis()
 
 fig.show()
