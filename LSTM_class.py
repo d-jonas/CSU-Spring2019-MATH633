@@ -4,7 +4,7 @@ import torch
    parameters for chorales."""
 
 class LSTM(torch.nn.Module):
-    def __init__(self, input_size=88, hidden_size=25, output_size=88, num_layers=1,
+    def __init__(self, input_size=1, hidden_size=25, output_size=1, num_layers=1,
                  bidirectional=False):
         super().__init__() # Run Module class constructor
         self.input_size = input_size # Number of expected features in the input

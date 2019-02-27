@@ -21,7 +21,7 @@ torch_tests, torch_tests_targets = get_chorales_tensors(chorales.train[0])
 
 
 # Define the LSTM network
-network = LSTM_class.LSTM()
+network = LSTM_class.LSTM(input_size = 88, output_size = 88)
 network.float()
 
 # Define the loss function and optimization function
