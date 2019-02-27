@@ -35,16 +35,34 @@ epochs = 500
 # Init Loss vector for plotting
 losses = np.empty(epochs)
 
-# Start training the network
-for i in range(epochs):
-    network.hidden = network.init_hidden()
-    out = network.forward(torch_tests, torch_tests.shape[0])
-    loss = loss_fn(out, torch_tests_targets)
-    optimizer.zero_grad()
-    loss.backward()
-    optimizer.step()
-    losses[i] = loss.item()
+# # Start training the network
+# for i in range(epochs):
+#     network.hidden = network.init_hidden()
+#     out = network.forward(torch_tests, torch_tests.shape[0])
+#     loss = loss_fn(out, torch_tests_targets)
+#     optimizer.zero_grad()
+#     loss.backward()
+#     optimizer.step()
+#     losses[i] = loss.item()
+#
+#     # Occasionally print the loss
+#     if i%5 == 0:
+#         print("Round: ", i, "; MSE: ", loss.item(), end='\r')
 
-    # Occasionally print the loss
+# NEW LOOP FOR ITERATING THROUGH TRAINING DATA SET ##
+for i in range(epochs):
+    for song in chorales.train:
+        torch_tests, torch_tests_targets = get_chorales_tensors(song)
+        network.hidden = network.init_hidden()
+        out = network.forward(torch_tests, torch_tests.shape[0])
+        loss = loss_fn(out, torch_tests_targets)
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+    losses[i] = loss.item()
     if i%5 == 0:
         print("Round: ", i, "; MSE: ", loss.item(), end='\r')
+
+# quick plot of loss as a function of epoch
+plt.plot(losses)
+plt.show(block = False)
