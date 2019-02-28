@@ -18,7 +18,7 @@ import numpy as np
 prefix = './'
 
 try:
-    with open(prefix + 'JSB Chorales.pickle','rb') as f:
+    with open(prefix + 'JSB_Chorales.pickle','rb') as f:
         all_data = pickle.load(f)
 except:
     raise Exception('Loading the chorales pickle file failed. Please ensure the file is in the proper folder.')
