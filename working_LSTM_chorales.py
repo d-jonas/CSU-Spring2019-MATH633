@@ -18,8 +18,6 @@ def get_chorales_tensors(song):
 
     return torch_input, torch_target
 
-torch_tests, torch_tests_targets = get_chorales_tensors(chorales.train[0])
-
 
 # Define the LSTM network
 network = LSTM_class.LSTM(input_size = 88, output_size = 88)
@@ -45,35 +43,37 @@ losses = np.empty(epochs)
 # start timer
 start = time.time()
 
-# # THIS LOOP ITERATES THROUGH ONE SONG ##
-# for i in range(epochs):
-#     network.hidden = network.init_hidden()
-#     out = network.forward(torch_tests, torch_tests.shape[0])
-#     loss = loss_fn(out, torch_tests_targets)
-#     optimizer.zero_grad()
-#     loss.backward()
-#     optimizer.step()
-#     losses[i] = loss.item()
-#
-#     # occasionally print the loss
-#     if i%5 == 0:
-#         print("Round: " + str(i) + "/" + str(epochs) + "; Error: " + str(loss.item()), end='\r')
-
-# THIS LOOP ITERATES THROUGH ENTIRE TRAINING DATASET ##
+# THIS LOOP ITERATES THROUGH ONE SONG ##
+torch_tests, torch_tests_targets = get_chorales_tensors(chorales.train[0])
 for i in range(epochs):
-    for song in chorales.train:
-        torch_tests, torch_tests_targets = get_chorales_tensors(song)
-        network.hidden = network.init_hidden()
-        out = network.forward(torch_tests, torch_tests.shape[0])
-        loss = loss_fn(out, torch_tests_targets)
-        optimizer.zero_grad()
-        loss.backward()
-        optimizer.step()
+    network.hidden = network.init_hidden()
+    out = network.forward(torch_tests, torch_tests.shape[0])
+    loss = loss_fn(out, torch_tests_targets)
+    optimizer.zero_grad()
+    loss.backward()
+    optimizer.step()
     losses[i] = loss.item()
 
     # occasionally print the loss
     if i%5 == 0:
         print("Round: " + str(i) + "/" + str(epochs) + "; Error: " + str(loss.item()), end='\r')
+
+# # THIS LOOP ITERATES THROUGH ENTIRE TRAINING DATASET ##
+# for i in range(epochs):
+#     for song in chorales.train:
+#         torch_tests, torch_tests_targets = get_chorales_tensors(song)
+#         network.hidden = network.init_hidden()
+#         out = network.forward(torch_tests, torch_tests.shape[0])
+#         loss = loss_fn(out, torch_tests_targets.view(128,88))
+#         optimizer.zero_grad()
+#         loss.backward()
+#         optimizer.step()
+#     losses[i] = loss.item()
+#
+#     # occasionally print the loss
+#     if i%5 == 0:
+#         print("Round: " + str(i) + "/" + str(epochs) + "; Error: " + str(loss.item()), end='\r')
+# #
 
 end = time.time()
 print('Total Duration: ' + str((end - start)/60) + ' minutes')
