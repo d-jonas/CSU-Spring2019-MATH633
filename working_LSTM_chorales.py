@@ -13,8 +13,8 @@ def get_chorales_tensors(song):
     Input: numpy array of shape (88, song_len - 1)
     Output: Two torch tensors of shape (song_len - 1, 1, 88)
     '''
-    torch_input = torch.tensor(song[:,:-1]).view(song.shape[1] - 1, 1, -1).float()
-    torch_target = torch.tensor(song[:,1:]).view(song.shape[1] - 1, 1, -1).float()
+    torch_input = torch.tensor(song[:,:-1],dtype=torch.float).view(song.shape[1] - 1, 1, -1)
+    torch_target = torch.tensor(song[:,1:],dtype=torch.float).view(song.shape[1] - 1, 1, -1)
 
     return torch_input, torch_target
 
@@ -73,7 +73,7 @@ for i in range(epochs):
 
     # occasionally print the loss
     if i%5 == 0:
-        print("Round: " + str(i) + "/" + str(epochs) + "; Error: " + str(loss.item()), end='\r')
+        print("Epoch: " + str(i) + "/" + str(epochs) + "; Error: " + str(loss.item()), end='\r')
 
 end = time.time()
 print('Total Duration: ' + str((end - start)/60) + ' minutes')
