@@ -48,6 +48,7 @@ tone_labels = []
 
 for i in range(shift,shift+88,skip):
     tone_labels.append(midi2note[i])
+    
 pyplot.yticks(range(shift,shift+88,skip),tone_labels)
 
 ax.set_xlabel('Beat number', fontsize=16)
