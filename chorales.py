@@ -88,8 +88,89 @@ def get_chord(encoded_sequence):
     cleaned_seq = [int(t) for t in encoded_sequence]
 
     m21chord = music21.chord.Chord(cleaned_seq)
-    
+
     chordname = m21chord.pitchedCommonName
 
     return chordname
+#
+
+def encode(note):
+    '''
+    Purpose: encode a single 88-vector into corresponding locations
+        suitable to be used by music21.
+
+    Inputs:
+        note - a list-like of length 88 with 0-1 entries.
+    Outputs:
+        enote - a list of python native integers indicating locations
+            of key presses, shifted by 21
+    '''
+    import numpy as np
+    locs = np.where(note)[0]
+    enote = [int(21+l) for l in locs]
+    return enote
+#
+
+def save_to_midi(notes,filename,verbosity=0):
+    '''
+    Purpose: save the input as a midi file.
+
+    Input:
+        notes : A collection of notes; can either be "encoded" or "decoded" forms:
+
+            Encoded: tuples/lists of integers between 21 to 109(?).
+            Decoded: an array of dimension 88 by T, where T is the length of the song,
+                and the entries are binary 0 or 1 indicating playing the corresponding note.
+
+        filename : string, the name of the file to be saved. By convention,
+            end the file in ".mid" to indicate a MIDI file.
+
+        verbosity : integer indicating the level of output. Default: 0
+
+    Output: None.
+    '''
+    try:
+        import music21
+    except:
+        raise ImportError('You need to install the music21 package to use this function.')
+    #
+    import numpy as np
+
+    dims = np.shape(notes)
+    if len(dims)==1:
+        # inferred to be the encoded format.
+        decoded = False
+        T = dims[0]
+    else:
+        # inferred to be decoded format.
+        width,T = dims
+        decoded = True
+    #
+
+    if verbosity>0: print('Encoding notes... ', end="")
+    if decoded:
+        enc_notes = [encode(note) for note in notes.T]
+    else:
+        # re-cast just in case....
+        enc_notes = [[int(n) for n in note] for note in notes]
+    #
+    if verbosity>0: print('done.')
+
+    # Basic idea: set up a music21 stream, then append the
+    # chords one at a time. Then use the .write() function.
+    if verbosity>0: print('Populating music21 Stream()... ', end='')
+    m21stream = music21.stream.Stream()
+    for en in enc_notes:
+        m21stream.append( music21.chord.Chord(en) )
+    #
+    if verbosity>0: print('done.')
+
+    # save
+    if verbosity>0: print('Saving %s to disk...'%filename, end='')
+    m21stream.write('midi', filename)
+    if verbosity>0: print('done.\n')
+
+
+
+    return
 #
