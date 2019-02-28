@@ -3,6 +3,7 @@ import LSTM_class
 import chorales
 import matplotlib.pyplot as plt
 import numpy as np
+import time
 
 # Prepare data for input into LSTM network
 # Pull from chorales, then convert to torch.tensors of correct shape
@@ -25,17 +26,26 @@ network = LSTM_class.LSTM(input_size = 88, output_size = 88)
 network.float()
 
 # Define the loss function and optimization function
-# Potential Loss Fucntions: L1Loss, MSELoss, CrossEntropyLoss, NLLLoss
-loss_fn = torch.nn.MSELoss()
+loss_library = {
+'MSELoss': torch.nn.MSELoss(),
+'L1Loss': torch.nn.L1Loss(),
+'CrossEntropyLoss': torch.nn.CrossEntropyLoss(),
+'NLLLoss': torch.nn.NLLLoss()
+}
+
+loss_fn = loss_library['MSELoss']
 optimizer = torch.optim.SGD(network.parameters(), lr=0.05, momentum=0.5)
 
 # Number of epochs
-epochs = 500
+epochs = 100
 
 # Init Loss vector for plotting
 losses = np.empty(epochs)
 
-# # Start training the network
+# start timer
+start = time.time()
+
+# # THIS LOOP ITERATES THROUGH ONE SONG ##
 # for i in range(epochs):
 #     network.hidden = network.init_hidden()
 #     out = network.forward(torch_tests, torch_tests.shape[0])
@@ -45,11 +55,11 @@ losses = np.empty(epochs)
 #     optimizer.step()
 #     losses[i] = loss.item()
 #
-#     # Occasionally print the loss
+#     # occasionally print the loss
 #     if i%5 == 0:
-#         print("Round: ", i, "; MSE: ", loss.item(), end='\r')
+#         print("Round: " + str(i) + "/" + str(epochs) + "; Error: " + str(loss.item()), end='\r')
 
-# NEW LOOP FOR ITERATING THROUGH TRAINING DATA SET ##
+# THIS LOOP ITERATES THROUGH ENTIRE TRAINING DATASET ##
 for i in range(epochs):
     for song in chorales.train:
         torch_tests, torch_tests_targets = get_chorales_tensors(song)
@@ -60,9 +70,18 @@ for i in range(epochs):
         loss.backward()
         optimizer.step()
     losses[i] = loss.item()
+
+    # occasionally print the loss
     if i%5 == 0:
-        print("Round: ", i, "; MSE: ", loss.item(), end='\r')
+        print("Round: " + str(i) + "/" + str(epochs) + "; Error: " + str(loss.item()), end='\r')
+
+end = time.time()
+print('Total Duration: ' + str((end - start)/60) + ' minutes')
 
 # quick plot of loss as a function of epoch
-plt.plot(losses)
+fig, ax = plt.subplots()
+fig.suptitle('Loss Function: ' + str(loss_fn))
+ax.set_xlabel('Epoch')
+ax.set_ylabel('Error')
+ax.plot(losses)
 plt.show(block = False)
