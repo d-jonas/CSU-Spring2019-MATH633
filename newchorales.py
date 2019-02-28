@@ -37,59 +37,36 @@ encoded_valid = all_data['valid']
 
 test = []
 for encoded_chorale in encoded_test:
-    chorale = np.zeros( (88,len(encoded_chorale)), dtype=float)
+    chorale = np.zeros( (len(encoded_chorale),88), dtype=float)
 
     for i,beat in enumerate(encoded_chorale):
         # According to Patrick, notes start at 21, so shift down.
         beat_shft = np.array(beat, dtype=int) - 21
-        chorale[beat_shft,i] = 1.
+        chorale[i,beat_shft] = 1.
     #
     test.append( chorale )
 #
 
 train = []
 for encoded_chorale in encoded_train:
-    chorale = np.zeros( (88,len(encoded_chorale)), dtype=float)
+    chorale = np.zeros( (len(encoded_chorale),88), dtype=float)
 
     for i,beat in enumerate(encoded_chorale):
         # According to Patrick, notes start at 21, so shift down.
         beat_shft = np.array(beat, dtype=int) - 21
-        chorale[beat_shft,i] = 1.
+        chorale[i,beat_shft] = 1.
     #
     train.append( chorale )
 #
 
 valid = []
 for encoded_chorale in encoded_valid:
-    chorale = np.zeros( (88,len(encoded_chorale)), dtype=float)
+    chorale = np.zeros( (len(encoded_chorale),88), dtype=float)
 
     for i,beat in enumerate(encoded_chorale):
         # According to Patrick, notes start at 21, so shift down.
         beat_shft = np.array(beat, dtype=int) - 21
-        chorale[beat_shft,i] = 1.
+        chorale[i,beat_shft] = 1.
     #
     valid.append( chorale )
-#
-
-def get_chord(encoded_sequence):
-    '''
-    Given a sequence of integers indicating positions of hit notes,
-    return the string indicating the corresponding chord.
-
-    Utilizes the music21 package. You need to install this.
-    '''
-    try:
-        import music21
-    except:
-        raise ImportError('You need to install the music21 package to use this function.')
-    #
-
-    # This package is very finnicky - only native python integers are supported.
-    cleaned_seq = [int(t) for t in encoded_sequence]
-
-    m21chord = music21.chord.Chord(cleaned_seq)
-    
-    chordname = m21chord.pitchedCommonName
-
-    return chordname
 #
