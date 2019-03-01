@@ -41,7 +41,7 @@ loss_fn = loss_library['MSELoss']
 optimizer = torch.optim.SGD(network.parameters(), lr=0.05, momentum=0.5)
 
 # Number of epochs
-epochs = 20
+epochs = 100
 
 # Init Loss vector for plotting
 losses = np.empty(epochs)
