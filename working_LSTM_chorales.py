@@ -21,7 +21,7 @@ def get_chorales_tensors(song):
 
 # Define the LSTM network by loading a saved version or creating a new one
 #try:
-#    network = torch.load('saved_lstm.pyt')
+#    network = torch.load('saved_lstm.pt')
 #    network.train()
 #    print('Loading saved network...')
 #except:
@@ -85,7 +85,7 @@ end = time.time()
 print('Total Duration: ' + str((end - start)/60) + ' minutes')
 
 # Save the network for reuse
-#torch.save(network, 'saved_lstm.pyt')
+#torch.save(network, 'saved_lstm.pt')
 
 # quick plot of loss as a function of epoch
 fig, ax = plt.subplots()
