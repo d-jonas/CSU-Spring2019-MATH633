@@ -33,13 +33,10 @@ class LSTM(torch.nn.Module):
         return (torch.zeros(self.num_layers, 1, self.hidden_size),
                 torch.zeros(self.num_layers, 1, self.hidden_size))
 
-    def forward(self, input, num_samples):
+    def forward(self, input):
         """
         Runs input data once through the network.
         """
-        # View reshapes the input into the expected size
-        # Probably should be done outside of the class
-        input = input
 
         # Send input through hidden LSTM layers
         out, self.hidden = self.lstm(input, self.hidden)

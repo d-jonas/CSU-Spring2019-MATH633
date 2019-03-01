@@ -18,17 +18,6 @@ def get_chorales_tensors(song):
 
     return torch_input, torch_target
 
-
-# Define the LSTM network by loading a saved version or creating a new one
-try:
-    network = torch.load('saved_lstm.pyt')
-    network.eval()
-    print('Loading saved network...')
-except:
-    print('Creating new network...')
-    network = LSTM_class.LSTM(input_size = 88, output_size = 88)
-    network.float()
-
 # Define the loss function and optimization function
 loss_library = {
 'MSELoss': torch.nn.MSELoss(),
@@ -53,7 +42,7 @@ start = time.time()
 torch_tests, torch_tests_targets = get_chorales_tensors(chorales.train[0])
 for i in range(epochs):
     network.hidden = network.init_hidden()
-    out = network.forward(torch_tests, torch_tests.shape[0])
+    out = network.forward(torch_tests)
     loss = loss_fn(out, torch_tests_targets)
     optimizer.zero_grad()
     loss.backward()
@@ -69,7 +58,7 @@ for i in range(epochs):
 #     for song in chorales.train:
 #         torch_tests, torch_tests_targets = get_chorales_tensors(song)
 #         network.hidden = network.init_hidden()
-#         out = network.forward(torch_tests, torch_tests.shape[0])
+#         out = network.forward(torch_tests)
 #         loss = loss_fn(out, torch_tests_targets.view(128,88))
 #         optimizer.zero_grad()
 #         loss.backward()
@@ -83,9 +72,6 @@ for i in range(epochs):
 
 end = time.time()
 print('Total Duration: ' + str((end - start)/60) + ' minutes')
-
-# Save the network for reuse
-torch.save(network, 'saved_lstm.pyt')
 
 # quick plot of loss as a function of epoch
 fig, ax = plt.subplots()
