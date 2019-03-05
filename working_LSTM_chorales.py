@@ -4,6 +4,7 @@ import chorales
 import matplotlib.pyplot as plt
 import numpy as np
 import time
+import train
 
 # Prepare data for input into LSTM network
 # Pull from chorales, then convert to torch.tensors of correct shape
@@ -26,11 +27,14 @@ loss_library = {
 'NLLLoss': torch.nn.NLLLoss()
 }
 
+# Initialize the networks
+network = train.get_network()
+
 loss_fn = loss_library['MSELoss']
 optimizer = torch.optim.SGD(network.parameters(), lr=0.05, momentum=0.5)
 
 # Number of epochs
-epochs = 100
+epochs = 500
 
 # Init Loss vector for plotting
 losses = np.empty(epochs)
