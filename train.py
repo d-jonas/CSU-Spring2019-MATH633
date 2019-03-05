@@ -1,10 +1,14 @@
 """
-A module with functions to load saved networks and train the network for a
-given number of epochs. Note that after training is completed, the line
+A module with functions to load saved networks, train the network for a given
+number of epochs, then save the resulting network.
 
-torch.save(network, 'saved_net.pt')
+An example of implementation would be:
 
-should be run to store the trained network for later use.
+import train
+model = train.get_network()
+model = train.train(model)
+train.save_network(model)
+
 """
 
 import torch
