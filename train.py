@@ -54,7 +54,6 @@ def get_network():
 
     return network
 
-<<<<<<< HEAD
 =======
 def save_network(network):
     """
