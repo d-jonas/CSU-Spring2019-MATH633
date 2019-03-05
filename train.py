@@ -54,8 +54,6 @@ def get_network():
 
     return network
 
-<<<<<<< HEAD
-=======
 def save_network(network):
     """
     Interactively asks the user whether the current network should be saved and,
@@ -96,7 +94,6 @@ def save_network(network):
             print('Sorry, that is not a valid option...')
 
 # Prepare data for input into LSTM network
->>>>>>> c622c784e370b00efd4e8682a0f818585a5c7b77
 # Pull from chorales, then convert to torch.tensors of correct shape
 def get_chorales_tensors(song):
     '''
@@ -144,7 +141,6 @@ def train(network, loss_fn, optimizer, data, epochs=10):
     ax.plot(losses)
     plt.show(block = False)
 
-<<<<<<< HEAD
     return network, losses
 
 def write_song(network, chord):
@@ -163,6 +159,3 @@ def write_song(network, chord):
     out = network.forward(note)
 
     return song
-=======
-    return network
->>>>>>> c622c784e370b00efd4e8682a0f818585a5c7b77
