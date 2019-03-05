@@ -41,12 +41,12 @@ def get_network():
                 print('Loading saved network...')
             except:
                 print('Unable to load saved network. Creating new network...')
-                network = LSTM_class.LSTM(input_size = 88, output_size = 88)
+                network = LSTM_class.LSTM(input_size = 88, hidden_size = 25, output_size = 88)
                 network.float()
             break
         elif resp == 'n':
             print('Creating new network...')
-            network = LSTM_class.LSTM(input_size = 88, output_size = 88)
+            network = LSTM_class.LSTM(input_size = 88, hidden_size = 25, output_size = 88)
             network.float()
             break
         else:
@@ -54,6 +54,8 @@ def get_network():
 
     return network
 
+<<<<<<< HEAD
+=======
 def save_network(network):
     """
     Interactively asks the user whether the current network should be saved and,
@@ -94,15 +96,16 @@ def save_network(network):
             print('Sorry, that is not a valid option...')
 
 # Prepare data for input into LSTM network
+>>>>>>> c622c784e370b00efd4e8682a0f818585a5c7b77
 # Pull from chorales, then convert to torch.tensors of correct shape
 def get_chorales_tensors(song):
     '''
     Takes a one-hot encoded song and returns an input tensor and target tensor
-    Input: numpy array of shape (88, song_len - 1)
+    Input: numpy array of shape (88, song_len)
     Output: Two torch tensors of shape (song_len - 1, 1, 88)
     '''
-    torch_input = torch.tensor(song[:,:-1],dtype=torch.float).view(song.shape[1] - 1, 1, -1)
-    torch_target = torch.tensor(song[:,1:],dtype=torch.float).view(song.shape[1] - 1, 1, -1)
+    torch_input = torch.tensor(song[:,:-1], dtype=torch.float).view(song.shape[1] - 1, 1, -1)
+    torch_target = torch.tensor(song[:,1:], dtype=torch.float).view(song.shape[1] - 1, 1, -1)
 
     return torch_input, torch_target
 
@@ -112,6 +115,7 @@ def train(network, loss_fn, optimizer, data, epochs=10):
 
     # Start timer
     start = time.time()
+    print('Training network...')
 
     # Train network
     for i in range(epochs):
@@ -140,4 +144,25 @@ def train(network, loss_fn, optimizer, data, epochs=10):
     ax.plot(losses)
     plt.show(block = False)
 
+<<<<<<< HEAD
+    return network, losses
+
+def write_song(network, chord):
+    '''
+    Composes a song from a given input.
+
+    TODO:
+    - figure out what input looks like. (1 chord? 2 chords? etc.)
+    - figure out threshold to determine how many notes are in an outputted chord.
+    - figure out when songs end. (hardcoded T-value?)
+
+    Input:
+    Output: np array, or torch tensor, or MIDI list
+    '''
+    note, note_target = get_chorales_tensors(chorales.train[0][:,:2])
+    out = network.forward(note)
+
+    return song
+=======
     return network
+>>>>>>> c622c784e370b00efd4e8682a0f818585a5c7b77
