@@ -18,6 +18,10 @@ def get_chorales_tensors(song):
 
     return torch_input, torch_target
 
+# Define the LSTM network
+network = LSTM_class.LSTM(input_size = 88, output_size = 88)
+network.float()
+
 # Define the loss function and optimization function
 loss_library = {
 'MSELoss': torch.nn.MSELoss(),
