@@ -13,12 +13,13 @@ import chorales
 import matplotlib.pyplot as plt
 import numpy as np
 import time
+from pathlib import Path
 
 def get_network():
     """
-    A function which interactively asks the user whether a saved network should be used and
-    depending on the answer, will ask for a file name or generate a new network. A default
-    filename of saved_net.pt is suggested.
+    Interactively asks the user whether a saved network should be used and
+    depending on the answer, will ask for a file name or generate a new network.
+    A default filename of saved_net.pt is suggested.
     """
     while True:
         resp = str(input('Should loading of a saved network be attempted? [y\\n]'))
@@ -45,6 +46,45 @@ def get_network():
             print('Sorry, that is not a valid option.')
 
     return network
+
+def save_network(network):
+    """
+    Interactively asks the user whether the current network should be saved and,
+    depending on the answer, will ask for a file name to which the network
+    should be saved. Then, if the filename already exists, the user will be
+    prompted to verify that the network should overwrite the current file.
+    A default filename of saved_net.pt is suggested.
+    """
+    resolved = False
+    while not resolved:
+        resp = str(input('Should saving of the current network be attempted? [y/n] '))
+        if resp == 'y':
+            # Save the LSTM network
+            name = str(input('Give the filename or press enter for default (saved_net.pt): '))
+            if name == '':
+                name = 'saved_net.pt'
+            if Path(name).is_file():
+                while True:
+                    resp = str(input('Overwrite the file at ' + str(Path(name)) + '? [y/n] '))
+                    if resp == 'y':
+                        torch.save(network, name)
+                        print(f'Network has been saved to {str(Path(name))}.')
+                        resolved = True
+                        break
+                    elif resp == 'n':
+                        break
+                    else:
+                        print('Please answer y or n...')
+                        continue
+            else:
+                torch.save(network, name)
+                print(f'Network has been saved to {str(Path(name))}.')
+                resolved = True
+        elif resp == 'n':
+            print('Ok, network will not be saved.')
+            resolved = True
+        else:
+            print('Sorry, that is not a valid option...')
 
 # Prepare data for input into LSTM network
 # Pull from chorales, then convert to torch.tensors of correct shape
@@ -92,3 +132,5 @@ def train(network, loss_fn, optimizer, data, epochs=10):
     ax.set_ylabel('Error')
     ax.plot(losses)
     plt.show(block = False)
+
+    return network
