@@ -19,10 +19,16 @@ loss_library = {
 }
 
 # Init network and parameters
-network = train.get_network()
+network = train.get_network(
+    input_size = 88,
+    hidden_size = 25,
+    output_size = 88, num_layers = 1,
+    bidirectional = False
+    )
+
 optimizer = torch.optim.SGD(network.parameters(), lr = 0.5, momentum = 0.5)
 data = chorales.train
 
 
 # Train the network
-losses = train.train(network, loss_library['MSELoss'], optimizer, data, epochs = 5)
+network, losses = train.train(network, loss_library['MSELoss'], optimizer, data, epochs = 5)

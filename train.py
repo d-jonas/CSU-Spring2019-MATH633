@@ -22,7 +22,7 @@ import numpy as np
 import time
 from pathlib import Path
 
-def get_network():
+def get_network(input_size = 88, hidden_size = 25, output_size = 88, num_layers = 1, bidirectional = False):
     """
     Interactively asks the user whether a saved network should be used and
     depending on the answer, will ask for a file name or generate a new network.
@@ -41,12 +41,12 @@ def get_network():
                 print('Loading saved network...')
             except:
                 print('Unable to load saved network. Creating new network...')
-                network = LSTM_class.LSTM(input_size = 88, hidden_size = 25, output_size = 88)
+                network = LSTM_class.LSTM(input_size, hidden_size, output_size, num_layers, bidirectional)
                 network.float()
             break
         elif resp == 'n':
             print('Creating new network...')
-            network = LSTM_class.LSTM(input_size = 88, hidden_size = 25, output_size = 88)
+            network = LSTM_class.LSTM(input_size, hidden_size, output_size, num_layers, bidirectional)
             network.float()
             break
         else:
