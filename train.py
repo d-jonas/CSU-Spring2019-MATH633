@@ -8,7 +8,7 @@ import train
 model = train.get_network()
 data = chorales.train
 loss_fn = torch.nn.MSELoss()
-optimizer = torch.optim.SGD(network.parameters(), lr=0.05, momentum=0.5)
+optimizer = torch.optim.SGD(model.parameters(), lr=0.05, momentum=0.5)
 model = train.train(model,loss_fn,optimizer)
 train.save_network(model)
 
