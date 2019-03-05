@@ -54,7 +54,6 @@ def get_network():
 
     return network
 
-=======
 def save_network(network):
     """
     Interactively asks the user whether the current network should be saved and,
