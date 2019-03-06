@@ -1,0 +1,91 @@
+########################################
+  - Installing Anaconda and Pytorch -
+########################################
+
+Tested on Windows and Linux. Need volunteer for macOS.
+
+----------Anaconda-------------------------------
+First we must install the Anaconda Distribution. This is available for 
+Windows, macOS, and Linux. Since Python 2 no longer is being supported and is
+considered legacy, we will install the Python 3 version of Anaconda.
+
+Step 1: Navigating to the Website and Clicking Things
+
+    Copy and paste the following URL into your browser's address bar:
+    https://www.anaconda.com/distribution/#download-section
+
+    When the page loads you should see a "Download" button under text reading 
+    "Python 3.7 version". Click on this download button.
+
+    An executable named something like "Anaconda3-5.3.1-Windows-x86_64.exe" should
+    be downloaded (the name and extension will be slightly different for MacOS and
+    Linux, but will begin with "Anaconda3"). This is the installer we will use in 
+    the next step.
+
+Step 2: Running the Installer
+
+    Run the installer. In the new window that should pop up, click "Next", then 
+    "I Agree". Make sure the radio button next to "Just Me" is selected, then
+    click "Next".
+
+    You should now be given the option of choosing where the Anaconda distribution
+    will be installed. The default should be fine (note if you happen to have a 
+    folder which already has that name, an error will occur and you will be prompted
+    to change the name). You then click "Next".
+
+    Leave the first checkbox unchecked. Check the second checkbox which registers
+    Anaconda as the default python program (you can read the benefits). Click
+    "Install". This will take a while and you cannot stop the installation once 
+    it is started. Then grab a Viennese coffee or Earl Grey tea (no substitutions).
+    
+    Skip the installation of Visual Code (unless you want to use it as your IDE,
+    I've heard good things about it but never used it).
+    
+Step 3: Learning More and Installing Packages
+
+    Leave the two checkboxes checked (the second one is the most relevant for the 
+    class) and click "Finish". Your browser will open with the Anaconda 
+    Documentation site. There are instructions for Navigating to the various tools
+    provided in your Anaconda installation for Windows, macOS, and Linux.
+    
+    Note that there is also a section on Conda in the dropdown table of contents
+    to the left of the page. Conda is the tool you use when installing packages, 
+    so this is definitely worth looking at, especially:
+    https://conda.io/projects/conda/en/latest/user-guide/getting-started.html
+    which shows, among other things, how to install Python packages.
+    
+    If you need to install a Python package, then open the Conda program (find
+    how to at
+    https://conda.io/projects/conda/en/latest/user-guide/getting-started.html#starting-conda
+    which provides instructions for Windows, macOS, and Linux).
+    Type "conda install packagename" (without quotes) to begin installing. You 
+    will have to agree to the installation of packages after Conda figures out 
+    what to do about dependencies.
+    
+    Sometimes you will have to use conda-forge which is the community supported set
+    of packages. For an example of this installing tensorflow, see
+    https://anaconda.org/conda-forge/tensorflow
+    
+-------------------------------------------------
+----------Pytorch--------------------------------
+The following instructions will add the Pytorch package to your Anaconda package set.
+This is better than installing Pytorch through the pip installer for Python because
+Anaconda will ensure Pytorch interacts nicely with all the other packages installed.
+
+Step 1) Open the Anaconda Prompt (if you search for the program on your computer, it 
+        should show up).
+
+Step 2) Type one of the following without the quotes: 
+        Windows: "conda install pytorch torchvision cudatoolkit=9.0 -c pytorch" 
+        Linux: "conda install pytorch torchvision cudatoolkit=9.0 -c pytorch"
+        macOS: "conda install pytorch torchvision -c pytorch"
+               (macOS Binaries dont support CUDA so more instruction will be needed if
+               CUDA is required)
+
+Step 3) When prompted, accept the changes to be made. The installation should not take 
+        more than a minute or two.
+        
+To use the Pytorch package in your Python code, include a line with "import torch" at
+the top of your code along with the other import statements.
+
+-------------------------------------------------
