@@ -160,6 +160,20 @@ def write_song(network, chord):
 
     return song
 
+def get_4notes(chord):
+    '''
+    Input:  chord (LSTM output)
+    Output: one-hot encoded chord (with four notes only)
+    '''
+    temp = np.argpartition(-chord, 4)
+    idx = temp[:4] #indices of the first four highest notes
+    s = chord.shape()[0]
+    chord = np.zeros(s)
+    chord[idx] = 1
+
+    return chord
+
+
 loss_library = {
 'MSELoss': torch.nn.MSELoss(),
 'L1Loss': torch.nn.L1Loss(),
