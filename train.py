@@ -159,3 +159,10 @@ def write_song(network, chord):
     out = network.forward(note)
 
     return song
+
+loss_library = {
+'MSELoss': torch.nn.MSELoss(),
+'L1Loss': torch.nn.L1Loss(),
+'CrossEntropyLoss': torch.nn.CrossEntropyLoss(),
+'NLLLoss': torch.nn.NLLLoss()
+}
