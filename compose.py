@@ -31,6 +31,6 @@ for i in range(N):
     song.append(chord)
 
 
-#print(song)
+
 song = np.array(song).reshape(88,N+1)
 chorales.save_to_midi(song, 'composition.mid', verbosity=1)

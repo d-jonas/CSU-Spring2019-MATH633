@@ -36,18 +36,19 @@ def get_network(input_size = 88, hidden_size = 25, output_size = 88, num_layers 
             if name == '':
                 name = 'saved_net.pt'
             try:
+                print('Loading saved network...', end = '')
                 network = torch.load(name)
-                network.train()
-                print('Loading saved network...')
             except:
-                print('Unable to load saved network. Creating new network...')
+                print('Unable to load saved network. Creating new network...', end = '')
                 network = LSTM_class.LSTM(input_size, hidden_size, output_size, num_layers, bidirectional)
                 network.float()
+                print('done.')
             break
         elif resp == 'n':
-            print('Creating new network...')
+            print('Creating new network...', end = '')
             network = LSTM_class.LSTM(input_size, hidden_size, output_size, num_layers, bidirectional)
             network.float()
+            print('done.')
             break
         else:
             print('Sorry, that is not a valid option.')
@@ -131,6 +132,7 @@ def train(network, loss_fn, optimizer, data, epochs=10):
             print("Epoch: " + str(i) + "/" + str(epochs) + "; Error: " + str(loss.item()), end='\r')
 
     end = time.time()
+    print('\nTraining successful!')
     print('Total Duration: ' + str((end - start)/60) + ' minutes')
 
     # Plot of loss as a function of epochs
