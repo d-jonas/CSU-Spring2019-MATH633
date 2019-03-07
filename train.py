@@ -169,7 +169,7 @@ def get_4notes(chord):
     '''
     temp = np.argpartition(-chord, 4)
     idx = temp[:4] #indices of the first four highest notes
-    s = chord.shape()[0]
+    s = chord.shape[0]
     chord = np.zeros(s)
     chord[idx] = 1
 
