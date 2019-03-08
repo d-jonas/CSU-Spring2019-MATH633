@@ -22,17 +22,25 @@ import numpy as np
 import time
 from pathlib import Path
 
-def get_network(input_size = 88, hidden_size = 25, output_size = 88, num_layers = 1, bidirectional = False):
+def get_network(input_size = 88, hidden_size = 25, output_size = 88, num_layers = 1, bidirectional = False, **kwargs):
     """
     Interactively asks the user whether a saved network should be used and
     depending on the answer, will ask for a file name or generate a new network.
     A default filename of saved_net.pt is suggested.
     """
     while True:
-        resp = str(input('Should loading of a saved network be attempted? [y\\n]'))
+        if 'resp' in kwargs:
+            resp = kwargs['resp']
+        else:
+            resp = str(input('Should loading of a saved network be attempted? [y\\n]'))
+        #
         if resp == 'y':
-            # Define the LSTM network by loading a saved version or creating a new one
-            name = str(input('Give the filename or press enter for default (saved_net.pt): '))
+            if 'filename' in kwargs:
+                name = kwargs['filename']
+            else:
+                # Define the LSTM network by loading a saved version or creating a new one
+                name = str(input('Give the filename or press enter for default (saved_net.pt): '))
+            #
             if name == '':
                 name = 'saved_net.pt'
             try:
