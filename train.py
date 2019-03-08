@@ -115,7 +115,10 @@ def get_chorales_tensors(song):
 
     return torch_input, torch_target
 
-def train(network, loss_fn, optimizer, data, epochs=10):
+def train(network, loss_fn, optimizer, data, epochs=10, **kwargs):
+    # make a plot of the loss?
+    vis_loss = kwargs.get('vis_loss', True)
+
     # Init Loss vector for plotting
     losses = np.empty(epochs)
 
@@ -144,13 +147,15 @@ def train(network, loss_fn, optimizer, data, epochs=10):
     print('Total Duration: ' + str((end - start)/60) + ' minutes')
 
     # Plot of loss as a function of epochs
-    fig, ax = plt.subplots()
-    fig.suptitle('Loss Function: ' + str(loss_fn))
-    ax.set_xlabel('Epoch')
-    ax.set_ylabel('Error')
-    ax.plot(losses)
-    plt.show(block = False)
-
+    if vis_loss:
+        fig, ax = plt.subplots()
+        fig.suptitle('Loss Function: ' + str(loss_fn))
+        ax.set_xlabel('Epoch')
+        ax.set_ylabel('Error')
+        ax.plot(losses)
+        plt.show(block = False)
+    #
+    
     return network, losses
 
 def write_song(network, chord):
