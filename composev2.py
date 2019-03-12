@@ -1,7 +1,8 @@
 """
-This module will generate a song of length N+1 starting from a random chord.
+This module will generate a song of length N+1 starting from a random chord
+given a network that has already been trained.
 
-March 7, 2019
+March 12, 2019
 """
 
 import chorales
