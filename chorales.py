@@ -80,6 +80,11 @@ def get_chord(encoded_sequence):
         raise ImportError('You need to install the music21 package to use this function.')
     #
 
+    if len(encoded_sequence)==88:
+        # need to encode!
+        encoded_sequence = encode(encoded_sequence)
+    #
+
     # This package is very finnicky - only native python integers are supported.
     cleaned_seq = [int(t) for t in encoded_sequence]
 
@@ -88,6 +93,49 @@ def get_chord(encoded_sequence):
     chordname = m21chord.pitchedCommonName
 
     return chordname
+#
+
+def chord_type(note):
+    '''
+    Purpose: identify a chord as being either "major", "minor", or "other".
+        This is based on a string comparison of the chord's name 
+        returned from get_chord(). These would result in a 3-class problem.
+
+    Inputs:
+        note - either an encoded (length 3 or 4 tuple) or decoded note (binary array length 88).
+            (yes, this is a misnomer)
+    Outputs:
+        label - string; one of "major", "minor", or "other".
+    '''
+    chordname = get_chord(note)
+    for option in ['major','minor']:
+        if option in chordname.lower():
+            return option
+    #
+    return 'other'  # only reached if none of the options are seen
+#
+
+def chord_root(note):
+    '''
+    Purpose: identify the root of a chord; these can be notes "A" through "G", possibly 
+        with a suffix indicating flat "-" or sharp "#". These would result in a 12-class problem
+        in theory -- I'm not 100% sure if there are issues with "synonyms" (e.g., A# and B-).
+
+    Inputs:
+        note - either an encoded (length 3 or 4 tuple) or decoded note (binary array length 88).
+            (yes, this is a misnomer)
+    Outputs:
+        label - string; one of "major", "minor", or "other".
+    '''
+    import music21
+    if len(note)==88:
+        enc_note = encode(note)
+    else:
+        enc_note = note
+    #
+    ch = music21.chord.Chord( enc_note )
+    root = ch.bass().name
+    return root
 #
 
 def encode(note):
