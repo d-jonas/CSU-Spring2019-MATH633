@@ -151,7 +151,13 @@ def save_to_midi(notes,filename,verbosity=0):
     if verbosity>0: print('Populating music21 Stream()... ', end='')
     m21stream = music21.stream.Stream()
     for en in enc_notes:
-        m21stream.append( music21.chord.Chord(en) )
+        if len(en)>0:
+            # Are there any notes played?
+            m21stream.append( music21.chord.Chord(en) )
+        else:
+            # Otherwise, append a rest instead.
+            m21stream.append( music21.note.Rest() )
+        #
     #
     if verbosity>0: print('done.')
 
