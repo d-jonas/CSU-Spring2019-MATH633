@@ -68,6 +68,22 @@ for encoded_chorale in encoded_valid:
     valid.append( chorale )
 #
 
+###############################################
+# 
+# Internal parameters
+#
+
+# Used for one-hot-encodings
+_note_encoding = {'A':0, 'A#':1, 'B-':1, 'B':2, 'B#':3,
+                            'C':3, 'C#':4, 'D-':4, 'D':5, 'D#':6, 
+                            'E-':6, 'E':7, 'E#':8, 'F':8, 'F#':9,
+                            'G-':9, 'G':10, 'G#':11, 'A-':11}
+
+_chord_encoding1 = {'major':0, 'minor':1, 'other':2}
+
+
+###############################################
+
 def get_chord(encoded_sequence):
     '''
     Given a sequence of integers indicating positions of hit notes,
@@ -139,8 +155,48 @@ def chord_root(note):
         enc_note = note
     #
     ch = music21.chord.Chord( enc_note )
-    root = ch.bass().name
+    root = ch.root().name
     return root
+#
+
+def one_hot_encode(label_input):
+    '''
+    Purpose: one-hot-encode the input string or list based on its type. 
+        If the input looks like a single note, then it is encoded 
+        in a 12-dimensional vector, obeying
+            A  -> [1,0,0,...,0]
+            A# -> [0,1,0,...,0]
+        and so on.
+
+        If the input is one of "major", "minor", or "other", 
+        then it is encoded in a 3-dimensional vector, specifically
+            major -> [1,0,0]
+            minor -> [0,1,0]
+            other -> [0,0,1]
+
+    Inputs:
+        label_input : a string, one of the types above.
+    Outputs:
+        label : a numpy *column* vector, defined according to the mapping above.
+    '''
+    import numpy as np
+
+    if any( [isinstance(label_input,list), isinstance(label_input,np.ndarray)] ):
+        # multiple inputs; sequentially process them and return
+        # the result as an array.
+        output = np.hstack( [one_hot_encode(l) for l in label_input])
+        return output
+    #
+
+    if len(label_input)<=2:
+        # Assumed to be a single note.
+        output = np.zeros((12,1))
+        output[_note_encoding[label_input]] = 1.
+    else:
+        output = np.zeros((3,1))
+        output[_chord_encoding1[label_input]] = 1.
+    #
+    return output
 #
 
 def encode(note):
