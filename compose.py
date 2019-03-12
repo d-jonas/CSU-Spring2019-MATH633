@@ -30,8 +30,8 @@ network, losses = train.train(network, loss_library['MSELoss'], optimizer, data,
 # Lara's version (picking top 4 values and setting them to 1, else set to 0)
 for i in range(N):
     pred = network.forward(pred)
-    pred = pred.detach().numpy().reshape(88,)
-    chord = train.get_4notes(pred)
+    prednp = pred.detach().numpy().reshape(88,)
+    chord = train.get_4notes(prednp)
     song.append(chord)
 
 # Codie's version (setting all values above 0.05 to 1, else set to 0)
