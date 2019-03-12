@@ -127,7 +127,12 @@ def chord_root(note):
     Outputs:
         label - string; one of "major", "minor", or "other".
     '''
-    import music21
+    try:
+        import music21
+    except:
+        raise ImportError('You need to install the music21 package to use this function.')
+    #
+
     if len(note)==88:
         enc_note = encode(note)
     else:
