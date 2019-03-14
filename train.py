@@ -110,8 +110,9 @@ def get_chorales_tensors(song):
     Input: numpy array of shape (88, song_len)
     Output: Two torch tensors of shape (song_len - 1, 1, 88)
     '''
-    torch_input = torch.tensor(song[:,:-1], dtype=torch.float).view(song.shape[1] - 1, 1, -1)
-    torch_target = torch.tensor(song[:,1:], dtype=torch.float).view(song.shape[1] - 1, 1, -1)
+
+    torch_input = torch.tensor(song[:,:-1], dtype=torch.float).view(1, song.shape[1] - 1, -1)
+    torch_target = torch.tensor(song[:,1:], dtype=torch.float).view(1, song.shape[1] - 1, -1)
 
     return torch_input, torch_target
 
@@ -129,8 +130,8 @@ def train(network, loss_fn, optimizer, data, epochs=10, **kwargs):
     # Train network
     for i in range(epochs):
         for song in data:
-            torch_tests, torch_tests_targets = get_chorales_tensors(song)
-            network.hidden = network.init_hidden()
+            torch_tests, torch_tests_targets = get_chorales_tensors2(song)
+            network.hidden = network.init_hidden(minibatch_size = song.shape[1]-1)
             out = network.forward(torch_tests)
             loss = loss_fn(out, torch_tests_targets.view(-1,88))
             optimizer.zero_grad()
@@ -155,7 +156,7 @@ def train(network, loss_fn, optimizer, data, epochs=10, **kwargs):
         ax.plot(losses)
         plt.show(block = False)
     #
-    
+
     return network, losses
 
 def write_song(network, chord):

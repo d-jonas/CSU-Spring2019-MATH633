@@ -28,10 +28,10 @@ class LSTM(torch.nn.Module):
         # Initialize hidden weights
         self.hidden = self.init_hidden()
 
-    def init_hidden(self):
+    def init_hidden(self, minibatch_size = 1):
         # The axes are (num_layers, minibatch_size, hidden_size)
-        return (torch.zeros(self.num_layers, 1, self.hidden_size),
-                torch.zeros(self.num_layers, 1, self.hidden_size))
+        return (torch.zeros(self.num_layers, minibatch_size, self.hidden_size),
+                torch.zeros(self.num_layers, minibatch_size, self.hidden_size))
 
     def forward(self, input):
         """
