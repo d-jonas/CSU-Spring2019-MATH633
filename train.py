@@ -130,7 +130,7 @@ def train(network, loss_fn, optimizer, data, epochs=10, **kwargs):
     # Train network
     for i in range(epochs):
         for song in data:
-            torch_tests, torch_tests_targets = get_chorales_tensors2(song)
+            torch_tests, torch_tests_targets = get_chorales_tensors(song)
             network.hidden = network.init_hidden(minibatch_size = song.shape[1]-1)
             out = network.forward(torch_tests)
             loss = loss_fn(out, torch_tests_targets.view(-1,88))
