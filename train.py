@@ -159,34 +159,29 @@ def train(network, loss_fn, optimizer, data, epochs=10, **kwargs):
 
     return network, losses
 
-def compose_song(network, rand_chord = True, song_len = 50, save_to_midi = False):
+def compose_song(network, seed, song_len = 50):
     '''
     Composes a song from a random chord. Can input starting chord(s)
 
-    Input: trained lstm network
-    Output: np array
+    Input: trained lstm network, sequence of chords of size (88, i) i = 1,... (optional)
+    Output: np array of size (88, song_len)
     '''
-    data = chorales.train
 
-    # Init random chord that net has seen before
-    rand_song = data[np.random.randint(0,len(data))]
-    rand_chord = rand_song[:,np.random.randint(0,rand_song.shape[1] - 1)]
+    first_chords = seed
 
     # Init songs in both np.array and torch.tensor format
-    song_np = rand_chord
-    song_torch = torch.tensor(rand_chord).view(1,1,88).float()
+    song_np = first_chords
+    song_torch = torch.tensor(first_chords).view(1, seed.shape[1], 88).float()
 
-    for i in range(song_len-1):
-        network.hidden = network.init_hidden(minibatch_size = i + 1)
+    for i in range(song_len):
+        network.hidden = network.init_hidden(minibatch_size = seed.shape[1] + i)
         pred_chord_torch = network.forward(song_torch)[:,-1,:] # predict next note w/ probabilities
         next_chord_np = get_4_notes(pred_chord_torch.detach().numpy().reshape(88,)) #->np.array of probabilities -> one hot encoded vector
         next_chord_torch = torch.tensor(next_chord_np, dtype = torch.float).view(1,1,88) # np.array -> torch.tensor
         song_torch = torch.cat((song_torch, next_chord_torch), 1) # append to torch tensor song
-        song_np = np.vstack((song_np, next_chord_np)) # append to np.array song
+        song_np = np.concatenate((song_np, next_chord_np.reshape(88,1)), axis = 1) # append to np.array song
 
-    song_np = song_np.T
-
-    return network, song_np #how do i get it to modify the network object but not necessarily return it as a variable?
+    return network, song_np[:,seed.shape[1]:]
 
 def get_4_notes(chord):
     '''
