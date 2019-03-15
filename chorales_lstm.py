@@ -31,4 +31,4 @@ data = chorales.train
 
 
 # Train the network
-network, losses = train.train(network, loss_library['MSELoss'], optimizer, data, epochs = 5)
+network, losses = train.train(network, loss_library['MSELoss'], optimizer, data, epochs = 100)

@@ -159,26 +159,38 @@ def train(network, loss_fn, optimizer, data, epochs=10, **kwargs):
 
     return network, losses
 
-def write_song(network, chord):
+def compose_song(network, rand_chord = True, song_len = 50, save_to_midi = False):
     '''
-    Composes a song from a given input.
+    Composes a song from a random chord. Can input starting chord(s)
 
-    TODO:
-    - figure out what input looks like. (1 chord? 2 chords? etc.)
-    - figure out threshold to determine how many notes are in an outputted chord.
-    - figure out when songs end. (hardcoded T-value?)
-
-    Input:
-    Output: np array, or torch tensor, or MIDI list
+    Input: trained lstm network
+    Output: np array
     '''
-    note, note_target = get_chorales_tensors(chorales.train[0][:,:2])
-    out = network.forward(note)
+    data = chorales.train
 
-    return song
+    # Init random chord that net has seen before
+    rand_song = data[np.random.randint(0,len(data))]
+    rand_chord = rand_song[:,np.random.randint(0,rand_song.shape[1] - 1)]
 
-def get_4notes(chord):
+    # Init songs in both np.array and torch.tensor format
+    song_np = rand_chord
+    song_torch = torch.tensor(rand_chord).view(1,1,88).float()
+
+    for i in range(song_len-1):
+        network.hidden = network.init_hidden(minibatch_size = i + 1)
+        pred_chord_torch = network.forward(song_torch)[:,-1,:] # predict next note w/ probabilities
+        next_chord_np = get_4_notes(pred_chord_torch.detach().numpy().reshape(88,)) #->np.array of probabilities -> one hot encoded vector
+        next_chord_torch = torch.tensor(next_chord_np, dtype = torch.float).view(1,1,88) # np.array -> torch.tensor
+        song_torch = torch.cat((song_torch, next_chord_torch), 1) # append to torch tensor song
+        song_np = np.vstack((song_np, next_chord_np)) # append to np.array song
+
+    song_np = song_np.T
+
+    return network, song_np #how do i get it to modify the network object but not necessarily return it as a variable?
+
+def get_4_notes(chord):
     '''
-    Input:  chord (LSTM output)
+    Input:  chord (LSTM output). Must first be converted to a 1-D np array
     Output: one-hot encoded chord (with four notes only)
     '''
     temp = np.argpartition(-chord, 4)
