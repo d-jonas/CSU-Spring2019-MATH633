@@ -72,13 +72,13 @@ for encoded_chorale in encoded_valid:
 #
 
 ###############################################
-# 
+#
 # Internal parameters
 #
 
 # Used for one-hot-encodings
 _note_encoding = {'A':0, 'A#':1, 'B-':1, 'B':2, 'B#':3,
-                            'C':3, 'C#':4, 'D-':4, 'D':5, 'D#':6, 
+                            'C':3, 'C#':4, 'D-':4, 'D':5, 'D#':6,
                             'E-':6, 'E':7, 'E#':8, 'F':8, 'F#':9,
                             'G-':9, 'G':10, 'G#':11, 'A-':11}
 
@@ -118,7 +118,7 @@ def get_chord(encoded_sequence):
 def chord_type(note):
     '''
     Purpose: identify a chord as being either "major", "minor", or "other".
-        This is based on a string comparison of the chord's name 
+        This is based on a string comparison of the chord's name
         returned from get_chord(). These would result in a 3-class problem.
 
     Inputs:
@@ -137,7 +137,7 @@ def chord_type(note):
 
 def chord_root(note):
     '''
-    Purpose: identify the root of a chord; these can be notes "A" through "G", possibly 
+    Purpose: identify the root of a chord; these can be notes "A" through "G", possibly
         with a suffix indicating flat "-" or sharp "#". These would result in a 12-class problem
         in theory -- I'm not 100% sure if there are issues with "synonyms" (e.g., A# and B-).
 
@@ -165,14 +165,14 @@ def chord_root(note):
 
 def one_hot_encode(label_input):
     '''
-    Purpose: one-hot-encode the input string or list based on its type. 
-        If the input looks like a single note, then it is encoded 
+    Purpose: one-hot-encode the input string or list based on its type.
+        If the input looks like a single note, then it is encoded
         in a 12-dimensional vector, obeying
             A  -> [1,0,0,...,0]
             A# -> [0,1,0,...,0]
         and so on.
 
-        If the input is one of "major", "minor", or "other", 
+        If the input is one of "major", "minor", or "other",
         then it is encoded in a 3-dimensional vector, specifically
             major -> [1,0,0]
             minor -> [0,1,0]
@@ -288,4 +288,73 @@ def save_to_midi(notes,filename,verbosity=0):
 
 
     return
+#
+
+def load_from_midi(fname, format='encoded'):
+    '''
+    Attempts to load a midi file into a format
+    which is useable with our algorithms.
+    Requires the music21 package.
+
+    Inputs:
+        fname : string. name of the file on disk.
+    Outputs:
+        notes : sequence of pitches played;
+            all information about rests, durations,
+            is ignored.
+
+            If format=='encoded', then this is a list of
+                sequences of integers.
+            If format=='decoded', then this is an 88-by-T
+                numpy array of zeros and ones with corresponding
+                attacks, shifted appropriately (this number is 21,
+                I believe)
+    Optional inputs:
+        format : string; either 'encoded' or 'decoded'
+            (default: 'encoded')
+    '''
+    try:
+        import music21
+    except:
+        raise ImportError('You need to install the music21 package to use this function.')
+    #
+
+    format = format.lower()
+    if format not in ['encoded','decoded']:
+        raise InputError('The format argument must be either "encoded" or "decoded".')
+
+    # Read the file.
+    mf = music21.converter.parse( fname )
+
+    # "flat" here refers to a flat file format, not
+    # the notes being flat.
+    attacks = list(mf.flat.notes)
+
+    notes = []
+    for a in attacks:
+        '''
+        "The ps property permits getting and setting
+        a pitch space value, a floating point number
+        representing pitch space, where 60.0 is C4, middle C,
+        61.0 is C#4 or D-4, and floating point values are
+        microtonal tunings (.01 is equal to one cent), so a
+        quarter-tone sharp above C5 is 72.5."
+
+        http://web.mit.edu/music21/doc/moduleReference/modulePitch.html#music21.pitch.Pitch.ps
+        '''
+        encoding = tuple( int(p.ps) for p in a.pitches )
+        notes.append( encoding )
+    #
+    if format=='decoded':
+        import numpy as np
+        T = len(notes)
+        arr = np.zeros( 88, T )
+        for j,note in enumerate(notes):
+            arr[notes,j] = 1.
+        #
+        return arr
+    else:
+        return notes
+    #
+    return notes
 #
