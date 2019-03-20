@@ -338,9 +338,9 @@ def load_from_midi(fname, format='encoded'):
     if format=='decoded':
         import numpy as np
         T = len(notes)
-        arr = np.zeros( 88, T )
+        arr = np.zeros( (88, T), dtype=float )
         for j,note in enumerate(notes):
-            arr[notes,j] = 1.
+            arr[note,j] = 1.
         #
         return arr
     else:
