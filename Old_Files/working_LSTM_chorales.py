@@ -4,6 +4,7 @@ import chorales
 import matplotlib.pyplot as plt
 import numpy as np
 import time
+import train
 
 # Prepare data for input into LSTM network
 # Pull from chorales, then convert to torch.tensors of correct shape
@@ -13,11 +14,10 @@ def get_chorales_tensors(song):
     Input: numpy array of shape (88, song_len - 1)
     Output: Two torch tensors of shape (song_len - 1, 1, 88)
     '''
-    torch_input = torch.tensor(song[:,:-1]).view(song.shape[1] - 1, 1, -1).float()
-    torch_target = torch.tensor(song[:,1:]).view(song.shape[1] - 1, 1, -1).float()
+    torch_input = torch.tensor(song[:,:-1],dtype=torch.float).view(song.shape[1] - 1, 1, -1)
+    torch_target = torch.tensor(song[:,1:],dtype=torch.float).view(song.shape[1] - 1, 1, -1)
 
     return torch_input, torch_target
-
 
 # Define the LSTM network
 network = LSTM_class.LSTM(input_size = 88, output_size = 88)
@@ -31,11 +31,14 @@ loss_library = {
 'NLLLoss': torch.nn.NLLLoss()
 }
 
+# Initialize the networks
+network = train.get_network()
+
 loss_fn = loss_library['MSELoss']
 optimizer = torch.optim.SGD(network.parameters(), lr=0.05, momentum=0.5)
 
 # Number of epochs
-epochs = 100
+epochs = 500
 
 # Init Loss vector for plotting
 losses = np.empty(epochs)
@@ -47,7 +50,7 @@ start = time.time()
 torch_tests, torch_tests_targets = get_chorales_tensors(chorales.train[0])
 for i in range(epochs):
     network.hidden = network.init_hidden()
-    out = network.forward(torch_tests, torch_tests.shape[0])
+    out = network.forward(torch_tests)
     loss = loss_fn(out, torch_tests_targets)
     optimizer.zero_grad()
     loss.backward()
@@ -56,14 +59,14 @@ for i in range(epochs):
 
     # occasionally print the loss
     if i%5 == 0:
-        print("Round: " + str(i) + "/" + str(epochs) + "; Error: " + str(loss.item()), end='\r')
+        print("Epoch: " + str(i) + "/" + str(epochs) + "; Error: " + str(loss.item()), end='\r')
 
 # # THIS LOOP ITERATES THROUGH ENTIRE TRAINING DATASET ##
 # for i in range(epochs):
 #     for song in chorales.train:
 #         torch_tests, torch_tests_targets = get_chorales_tensors(song)
 #         network.hidden = network.init_hidden()
-#         out = network.forward(torch_tests, torch_tests.shape[0])
+#         out = network.forward(torch_tests)
 #         loss = loss_fn(out, torch_tests_targets.view(128,88))
 #         optimizer.zero_grad()
 #         loss.backward()

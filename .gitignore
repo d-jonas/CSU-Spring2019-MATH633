@@ -4,5 +4,6 @@
 *__pycache__
 *~
 *.pickle
-*.mid
+*.pt
 *.csv
+*.mid
