@@ -10,8 +10,7 @@ import chorales
 import numpy as np
 import matplotlib.pyplot as plt
 
-def train(network, loss_fn, optimizer, collection, epochs=1000,
-          minibatch=5):
+def train(network, loss_fn, optimizer, collection, epochs=1000, minibatch=5):
     """
     Performs a training session on the given collection for a chosen number of
     epochs, prints some loss information as the session progresses, and
@@ -37,6 +36,8 @@ def train(network, loss_fn, optimizer, collection, epochs=1000,
             optimizer.step()
             losses[i] += loss.item()
 
+
+
         # Occasionally print the loss
         if i%5 == 0:
             print("Epoch: " + str(i) + "/" + str(epochs) + "; Error: " + str(loss.item()), end='\r')
@@ -48,6 +49,60 @@ def train(network, loss_fn, optimizer, collection, epochs=1000,
     print('Total Duration: ' + str((end - start)/60) + ' minutes')
     return network, losses
 
+def train_with_test(network, loss_fn, optimizer, train_collection, test_collection,
+          epochs=1000, minibatch=5):
+    """
+    Performs a training session on the given train collection for a chosen number of
+    epochs, prints some loss information as the session progresses, and
+    produces a numpy array for plotting of the loss progress at the end of the
+    session. Returns a trained network. Once every epoch, the network is passed
+    the test collection and the result is stored in a numpy array for plotting
+    later.
+    """
+    losses_train = np.zeros(epochs)
+    losses_test = np.zeros(epochs)
+    start = time.time()
+    for i in range(epochs):
+        for song in train_collection:
+            batch = np.zeros((song.size//88//minibatch-1, minibatch, 88))
+            targets = np.zeros((song.size//88//minibatch-1, minibatch, 88))
+            network.hidden = network.init_hidden(minibatch_size = minibatch)
+            for j in range(song.size//88//minibatch-1):
+                batch[j,:,:] = song[:,j:j+minibatch].T
+                targets[j] = song[:,j+1:j+minibatch+1].T
+            batch = torch.tensor(batch,dtype=torch.float)
+            targets = torch.tensor(targets,dtype=torch.float)
+            out = network.forward(batch)
+            loss = loss_fn(out, targets)
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+            losses_train[i] += loss.item()
+
+        for song in test_collection:
+            batch = np.zeros((song.size//88//minibatch-1, minibatch, 88))
+            targets = np.zeros((song.size//88//minibatch-1, minibatch, 88))
+            network.hidden = network.init_hidden(minibatch_size = minibatch)
+            for j in range(song.size//88//minibatch-1):
+                batch[j,:,:] = song[:,j:j+minibatch].T
+                targets[j] = song[:,j+1:j+minibatch+1].T
+            batch = torch.tensor(batch,dtype=torch.float)
+            targets = torch.tensor(targets,dtype=torch.float)
+            out = network.forward(batch)
+            loss = loss_fn(out, targets)
+            losses_test[i] += loss.item()
+
+        # Occasionally print the loss
+        if i%5 == 0:
+            print("Epoch: " + str(i) + "/" + str(epochs) + "; Error: " + str(loss.item()), end='\r')
+
+    losses_train = losses_train/len(chorales.train)
+    losses_test = losses_test/len(chorales.test)
+
+    end = time.time()
+    print('\nTraining successful!')
+    print('Total Duration: ' + str((end - start)/60) + ' minutes')
+    return network, losses_train, losses_test
 
 def test(network, loss_fn, collection, minibatch=5):
     """
@@ -126,6 +181,20 @@ def plot_losses(losses, epochs):
     ax.plot(t, losses)
     plt.show(block = False)
 
+def plot_losses_train_and_test(losses_train, losses_test, epochs):
+    """
+    Produces a plot of the loss function values stored in losses_train and
+    losses_test.
+    """
+    fig, ax = plt.subplots()
+    ax.set_title('Error Reduction')
+    ax.set_xlabel('Error on Training Dataset')
+    ax.set_ylabel('Error on Test Dataset')
+    t = list(range(1,epochs+1))
+    ax.plot(t, losses_train, color='b', label='Train')
+    ax.plot(t, losses_test, color='r', label='Test')
+    ax.legend()
+    plt.show(block = False)
 
 def plot_song(song):
     """
