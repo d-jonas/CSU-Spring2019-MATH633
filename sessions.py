@@ -130,7 +130,7 @@ def test(network, loss_fn, collection, minibatch=5):
     ax.set_xlabel('Song')
     ax.set_ylabel('Error')
     t = list(range(1,len(collection)+1))
-    ax.plot(t, losses)
+    ax.plot(t, losses, marker = 'o')
     plt.show(block = False)
     return losses
 
@@ -180,6 +180,7 @@ def plot_losses(losses, epochs):
     t = list(range(1,epochs+1))
     ax.plot(t, losses)
     plt.show(block = False)
+    return fig,ax
 
 def plot_losses_train_and_test(losses_train, losses_test, epochs):
     """
@@ -188,13 +189,14 @@ def plot_losses_train_and_test(losses_train, losses_test, epochs):
     """
     fig, ax = plt.subplots()
     ax.set_title('Error Reduction')
-    ax.set_xlabel('Error on Training Dataset')
-    ax.set_ylabel('Error on Test Dataset')
+    ax.set_xlabel('Epoch')
+    ax.set_ylabel('Error on Dataset')
     t = list(range(1,epochs+1))
     ax.plot(t, losses_train, color='b', label='Train')
     ax.plot(t, losses_test, color='r', label='Test')
     ax.legend()
     plt.show(block = False)
+    return fig,ax
 
 def plot_song(song):
     """

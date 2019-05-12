@@ -9,24 +9,43 @@ import time
 import numpy as np
 import matplotlib.pyplot as plt
 
+def batch_song(song, minibatch):
+    """
+    Reshapes song into a torch tensor of appropriate dimensions given the
+    minibatch size.
+    """
+    batch = np.zeros((song.size//88//minibatch-1, minibatch, 88))
+    targets = np.zeros((song.size//88//minibatch-1, minibatch, 88))
+    for i in range(song.size//88//minibatch-1):
+        batch[i,:,:] = song[:,i:i+minibatch].T
+        targets[i] = song[:,i+1:i+minibatch+1].T
+    batch = torch.tensor(batch,dtype=torch.float)
+    targets = torch.tensor(targets,dtype=torch.float)
+    return batch, targets
+
 def vary_layers(song):
     """
     Plots the error reduction on one song for multiple hidden layer depths
     """
     epochs = 10000
+    minibatch = 4
 
     # 1 hidden layer
     network = LSTM(88, 50, 88, 1) # (input_size, hidden_size, output_size, num_layers)
     network.float()
 
-    optimizer = torch.optim.SGD(network.parameters(), lr = 0.5, momentum = 0.5)
+    optimizer = torch.optim.SGD(network.parameters(), lr = 0.02, momentum = 0.5)
     loss_fn = torch.nn.MSELoss()
 
     losses_hid1 = np.zeros(epochs)
+
+    batch, targets = batch_song(song, minibatch)
+
     start = time.time()
+
     for i in range(epochs):
         network.hidden = network.init_hidden(minibatch_size = minibatch)
-        out = network.forward(song)
+        out = network.forward(batch)
         loss = loss_fn(out, targets)
         optimizer.zero_grad()
         loss.backward()
@@ -46,14 +65,17 @@ def vary_layers(song):
     network = LSTM(88, 50, 88, 2) # (input_size, hidden_size, output_size, num_layers)
     network.float()
 
-    optimizer = torch.optim.SGD(network.parameters(), lr = 0.5, momentum = 0.5)
+    optimizer = torch.optim.SGD(network.parameters(), lr = 0.02, momentum = 0.5)
     loss_fn = torch.nn.MSELoss()
 
     losses_hid2 = np.zeros(epochs)
+
+    batch, targets = batch_song(song, minibatch)
+
     start = time.time()
     for i in range(epochs):
         network.hidden = network.init_hidden(minibatch_size = minibatch)
-        out = network.forward(song)
+        out = network.forward(batch)
         loss = loss_fn(out, targets)
         optimizer.zero_grad()
         loss.backward()
@@ -73,14 +95,17 @@ def vary_layers(song):
     network = LSTM(88, 50, 88, 4) # (input_size, hidden_size, output_size, num_layers)
     network.float()
 
-    optimizer = torch.optim.SGD(network.parameters(), lr = 0.5, momentum = 0.5)
+    optimizer = torch.optim.SGD(network.parameters(), lr = 0.02, momentum = 0.5)
     loss_fn = torch.nn.MSELoss()
 
     losses_hid4 = np.zeros(epochs)
+
+    batch, targets = batch_song(song, minibatch)
+
     start = time.time()
     for i in range(epochs):
         network.hidden = network.init_hidden(minibatch_size = minibatch)
-        out = network.forward(song)
+        out = network.forward(batch)
         loss = loss_fn(out, targets)
         optimizer.zero_grad()
         loss.backward()
@@ -100,14 +125,17 @@ def vary_layers(song):
     network = LSTM(88, 50, 88, 8) # (input_size, hidden_size, output_size, num_layers)
     network.float()
 
-    optimizer = torch.optim.SGD(network.parameters(), lr = 0.5, momentum = 0.5)
+    optimizer = torch.optim.SGD(network.parameters(), lr = 0.02, momentum = 0.5)
     loss_fn = torch.nn.MSELoss()
 
     losses_hid8 = np.zeros(epochs)
+
+    batch, targets = batch_song(song, minibatch)
+
     start = time.time()
     for i in range(epochs):
         network.hidden = network.init_hidden(minibatch_size = minibatch)
-        out = network.forward(song)
+        out = network.forward(batch)
         loss = loss_fn(out, targets)
         optimizer.zero_grad()
         loss.backward()
@@ -139,19 +167,23 @@ def vary_size(song):
     Produce a plot of error reduction for various hidden layer sizes.
     """
     epochs = 10000
+    minibatch = 4
 
     # Hidden layer size 25
     network = LSTM(88, 25, 88, 1) # (input_size, hidden_size, output_size, num_layers)
     network.float()
 
-    optimizer = torch.optim.SGD(network.parameters(), lr = 0.5, momentum = 0.5)
+    optimizer = torch.optim.SGD(network.parameters(), lr = 0.02, momentum = 0.5)
     loss_fn = torch.nn.MSELoss()
 
     losses25 = np.zeros(epochs)
+
+    batch, targets = batch_song(song, minibatch)
+
     start = time.time()
     for i in range(epochs):
         network.hidden = network.init_hidden(minibatch_size = minibatch)
-        out = network.forward(song)
+        out = network.forward(batch)
         loss = loss_fn(out, targets)
         optimizer.zero_grad()
         loss.backward()
@@ -171,14 +203,17 @@ def vary_size(song):
     network = LSTM(88, 50, 88, 1) # (input_size, hidden_size, output_size, num_layers)
     network.float()
 
-    optimizer = torch.optim.SGD(network.parameters(), lr = 0.5, momentum = 0.5)
+    optimizer = torch.optim.SGD(network.parameters(), lr = 0.02, momentum = 0.5)
     loss_fn = torch.nn.MSELoss()
 
     losses50 = np.zeros(epochs)
+
+    batch, targets = batch_song(song, minibatch)
+
     start = time.time()
     for i in range(epochs):
         network.hidden = network.init_hidden(minibatch_size = minibatch)
-        out = network.forward(song)
+        out = network.forward(batch)
         loss = loss_fn(out, targets)
         optimizer.zero_grad()
         loss.backward()
@@ -198,14 +233,17 @@ def vary_size(song):
     network = LSTM(88, 100, 88, 1) # (input_size, hidden_size, output_size, num_layers)
     network.float()
 
-    optimizer = torch.optim.SGD(network.parameters(), lr = 0.5, momentum = 0.5)
+    optimizer = torch.optim.SGD(network.parameters(), lr = 0.02, momentum = 0.5)
     loss_fn = torch.nn.MSELoss()
 
     losses100 = np.zeros(epochs)
+
+    batch, targets = batch_song(song, minibatch)
+
     start = time.time()
     for i in range(epochs):
         network.hidden = network.init_hidden(minibatch_size = minibatch)
-        out = network.forward(song)
+        out = network.forward(batch)
         loss = loss_fn(out, targets)
         optimizer.zero_grad()
         loss.backward()

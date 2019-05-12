@@ -24,7 +24,7 @@ loss_fn = torch.nn.MSELoss()
 network, losses_train = sessions.train(network, loss_fn, optimizer, chorales.train,
                                  epochs, minibatch=5)
 # Plot the error reduction
-sessions.plot_losses(losses_train,epochs)
+trfig, trax = sessions.plot_losses(losses_train,epochs)
 
 # Test the network on the test data set and plot results
 losses_test = sessions.test(network, loss_fn, chorales.test, minibatch=5)

@@ -10,21 +10,21 @@ import chorales
 import sessions
 
 # Number of epochs to train the network
-epochs = 100
+epochs = 10000
 
 # Create a new network
 network = LSTM(88, 50, 88, 1) # (input_size, hidden_size, output_size, num_layers)
 network.float()
 
 # Create an optimizer and loss function
-optimizer = torch.optim.SGD(network.parameters(), lr = 0.5, momentum = 0.5)
+optimizer = torch.optim.SGD(network.parameters(), lr = 0.02, momentum = 0.5)
 loss_fn = torch.nn.MSELoss()
 
 # Train the network on the test data set
 network, losses_train, losses_test = sessions.train_with_test(network, loss_fn, optimizer,
                         chorales.train, chorales.test, epochs, minibatch=5)
 # Plot the error reduction
-sessions.plot_losses_train_and_test(losses_train, losses_test, epochs)
+trfig, trax = sessions.plot_losses_train_and_test(losses_train, losses_test, epochs)
 
 # Test the network on the test data set and plot results
 losses_test = sessions.test(network, loss_fn, chorales.test, minibatch=5)
